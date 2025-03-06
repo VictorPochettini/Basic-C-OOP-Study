@@ -8,18 +8,31 @@ class Vehicle
     public string Model { get{return _model;} set{_model = value;}}
     protected int _year;
     public int Year { get{return _year;} set{_year = value<0?0:value;}}
+
+    public virtual void StartEngine()
+    {
+        Console.WriteLine("Vehicle engine started with a key turn.\n")
+    }
 }
 
 class Car : Vehicle
 {
     protected int _door;
     public int NumberOfDoors { get{return _door;} set{_door = value;}}
+    public override void StartEngine()
+    {
+        Console.WriteLine("Car engine started with a key turn.\n");
+    }
 }
 
 class Motorcycle : Vehicle
 {
     protected string _side;
     public string HasSideCar { get{return _side;} set{_side = value;}}
+    public override void StartEngine()
+    {
+        Console.WriteLine("Motorcycle engine started with a key turn.\n");
+    }
 }
 
 class Program

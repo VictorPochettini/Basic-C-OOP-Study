@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 class Character
 {
@@ -44,6 +45,10 @@ class Character
 
 class Player : Character
 {
+    public int X { get; set; }
+    public int Y { get; set; }
+    public int Coins { get; set; }
+    List<string> Itens = new List<string>;
     public Player(int HP, int Attack, string Name) : base(HP, Attack, Name) { }
 
     public override void Die()
@@ -73,14 +78,17 @@ class Program
             switch(input)
             {
                 case 1:
-
+                StartGame();
                 break;
 
                 case 2:
                 break;
             }
-        } while( input != 2);
+        } while( input != 2 );
     }
 
-
+    public void StartGame()
+    {
+        
+    }
 }

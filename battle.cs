@@ -21,7 +21,6 @@ class Character
         get { return _attack; } 
         set { _attack = value > 0? value : 1; }
     }
-
     protected string _name;
     public string Name
     {
@@ -46,15 +45,18 @@ class Character
         Console.WriteLine("The creature died");
     }
 
-    public int CounterAttack()
+    public int CounterAttack(int attack1)
     {
         int ca = Globals.random.Next(1, 11);
         if(ca < 4)
         {
+            Console.WriteLine("You counterattacked!\n")
             return Attack;
         }
         else
         {
+            Console.WriteLine("You failed counterattacking!\n")
+            HP -= attack1;
             return 0;
         }
     }
@@ -76,25 +78,29 @@ class Player : Character
         Console.WriteLine("You died, stupid bitch\n");
     }
 
-    public void Setting(int HP, int Attack)
+    public void Setting()
     {
-        do
+       do
         {
             int total = 30;
-            do
+            Console.WriteLine("You have 30 points to share to your HP and Attack\n");
+            Console.WriteLine("How much HP do you want?\n");
+            HP = int.Parse(Console.ReadLine());
+            if (HP > 30 || HP < 0)
             {
-                Console.WriteLine("You have 30 points to share to your HP and Attack\n");
-                Console.WriteLine("How much HP do you want?\n");
-                HP = int.Parse(Console.ReadLine());
-                if (HP > 30 || HP < 0)
-                {
-                    Console.WriteLine("Error: Not enough points\n");
-                    continue;
-                }
-                Attack = total - HP;
-                Console.WriteLine("HP: " + HP + "\nAttack: " + Attack);
-                break;
-            } while (true);
+                Console.WriteLine("Error: Not enough points\n");
+                continue;
+            }
+            Attack = total - HP;
+            Console.WriteLine("HP: " + HP + "\nAttack: " + Attack);
+            break;
+        } while (true);
+    }
+
+    public void Attacks(Enemy enemy)
+    {
+        Console.WriteLine("You attack!\n");
+        
     }
 }
 
@@ -102,7 +108,7 @@ class Enemy : Character
 {
     public Enemy(int HP, int Attack, string Name) : base(HP, Attack, Name) { }
 
-    public void Attack(Player player)
+    public void Attacks(Player player)
     {
                 Console.WriteLine(Name + " attacks!\n");
                 Console.WriteLine("What will you do\n");
@@ -112,18 +118,20 @@ class Enemy : Character
                 switch(option)
                 {
                     case 1:
-                    HP -= player.CounterAttack();
+                    HP -= player.CounterAttack(Attack);
                     break;
 
                     case 2:    
                     if(Dodge())
                     {
+                        Console.WriteLine("You dodged!\n");
                         break;
                     }
                     else
                     {
-                        player.HP -= Attack;
+                        Console.WriteLine("Dodge failed!\n";)
                         Console.WriteLine("You received " + Attack + " damage!\n");
+                        player.HP -= Attack;
                         break;
                     }
 
@@ -144,7 +152,7 @@ class Program
     static void Main()
     {   do
         {
-            Console.WriteLine("Welcome to Fighting Game");
+            Console.WriteLine("Welcome to THE Fighting Game");
             Console.WriteLine("\n(1)Play\n(2)Leave\n");
 
             int input = int.Parse(Console.ReadLine());
@@ -190,20 +198,37 @@ class Program
         }
 
         Console.WriteLine("\nYou're fighting!\n");
-
-        while(player.HP > 0 && enemy.HP > 0)
+        
+        int beginner = Globals.random.Next(1,3);
+        switch(beginner)
         {
-            int beginner = Globals.random.Next(1,3);
-            switch(beginner)
-            {
                 case 1:
                 Console.WriteLine("You begin!\n");
+                while(player.HP > 0 && enemy.HP > 0)
+                {
+                    enemy.Attacks(player);
+                    Display(player, enemy);
+                }
                 break;
 
                 case 2:
                 Console.WriteLine(enemy.Name + " begins!\n\n");
+                while(player.HP > 0 && enemy.HP > 0)
+                {
+                    enemy.Attacks(player);
+                    Display(player, enemy);
+                }
                 break;
-            }            
-        }         
-    }
+        }            
+    } 
+
+    public void Display(Player player, Enemy enemy)
+    {
+        Console.WriteLine("HP: " + player.HP + "\n");
+        Console.WriteLine("Attack: " + player.HP + "\n");
+        Console.WriteLine("E. HP:" + enemy.HP + "\n");
+        Console.WriteLine("E. Attack: " + enemy.HP + "\n\n");
+    }        
 }
+
+//Ainda tenho que implementar o ataque do player, onde os monstros tem as mesmas opções; um displayer de HP e ataque no começo do turno;

@@ -25,7 +25,7 @@ class Character
     public string Name
     {
         get { return _name; } 
-        set { _name = value ?? throw new ArgumentException("Error: No name was informed\n"); }
+        set { _name = value ?? throw new ArgumentException("Error: No name was informed"); }
     }
 
     public Character(float HP, float Attack, string Name)
@@ -50,12 +50,12 @@ class Character
         int ca = Globals.random.Next(1, 11);
         if(ca < 4)
         {
-            Console.WriteLine("You counterattacked!\n");
+            Console.WriteLine("You counterattacked!");
             return Attack;
         }
         else
         {
-            Console.WriteLine("You failed counterattacking!\n");
+            Console.WriteLine("You failed counterattacking!");
             HP -= attack1;
             return 0;
         }
@@ -74,7 +74,7 @@ class Player : Character
 
     public override void Die()
     {
-        Console.WriteLine("You died, stupid bitch\n");
+        Console.WriteLine("You died, stupid bitch");
     }
 
     public void Setting()
@@ -82,12 +82,12 @@ class Player : Character
        do
         {
             int total = 30;
-            Console.WriteLine("You have 30 points to share to your HP and Attack\n");
-            Console.WriteLine("How much HP do you want?\n");
+            Console.WriteLine("You have 30 points to share to your HP and Attack");
+            Console.WriteLine("How much HP do you want?");
             HP = float.Parse(Console.ReadLine());
             if (HP > 30 || HP < 0)
             {
-                Console.WriteLine("Error: Not enough points\n");
+                throw new ArgumentException("Error: Not enough points\n");
                 continue;
             }
             Attack = total - HP;
@@ -98,21 +98,27 @@ class Player : Character
 
     public void Attacks(Enemy enemy)
     {
-        Console.WriteLine("You attack!\n");
+        Console.WriteLine("You attack!");
         switch(enemy.Name)
         {
             case "Red Skeleton":
-            if(HP <= 20 && enemy.HP > Attack)
-            {
-                Console.WriteLine("If my counterattack succeeds, you die! MUAHAHAHA\n");
-                HP -= enemy.CounterAttack(Attack);
-            }
-            else
-            {
-
-            }
+            RedSkeleton(enemy)
             break;
         }
+    }
+
+    public void RedSkeleton(Enemy enemy)
+    {
+        if(HP <= 20 && enemy.HP > Attack)
+            {
+                Console.WriteLine("If my counterattack succeeds, you die! MUAHAHAHA");
+                HP -= enemy.CounterAttack(Attack);
+            }
+        else
+            {
+                Console.WriteLine("I better not risk this time...")
+                enemy.HP -= Attack;
+            }
     }
 }
 
@@ -122,9 +128,9 @@ class Enemy : Character
 
     public void Attacks(Player player)
     {
-        Console.WriteLine(Name + " attacks!\n");
-        Console.WriteLine("What will you do\n");
-        Console.WriteLine("\n(1) Counter Attack [30% Chance]\n(2) Dodge [40% Chance][150% of normal damage if fails]\n (3) Nothing\n\n");
+        Console.WriteLine(Name + " attacks!");
+        Console.WriteLine("What will you do");
+        Console.WriteLine("\n(1) Counter Attack [30% Chance]\n(2) Dodge [40% Chance][150% of normal damage if fails]\n (3) Nothing\n");
 
         int option = int.Parse(Console.ReadLine());
         switch(option)
@@ -136,24 +142,24 @@ class Enemy : Character
             case 2:    
                 if(Dodge())
                 {
-                    Console.WriteLine("You dodged!\n");
+                    Console.WriteLine("You dodged!");
                     break;
                 }
                 else
                 {
-                    Console.WriteLine("Dodge failed!\n");
-                    Console.WriteLine("You received " + 1.5 * Attack + " damage!\n");
+                    Console.WriteLine("Dodge failed!");
+                    Console.WriteLine("You received " + 1.5 * Attack + " damage!");
                     player.HP -= (float)(1.5 * Attack);
                     break;
                 }
 
             case 3:
                 player.HP -= Attack;
-                Console.WriteLine("You received " + Attack + " damage!\n");
+                Console.WriteLine("You received " + Attack + " damage!");
                 break;
 
             default:
-                Console.WriteLine("Error: Option doesn't exist\n");
+                throw new ArgumentException("Error: Option doesn't exist\n");
                 break;
         }
     }
@@ -188,7 +194,7 @@ class Program
         Player player = new Player(0, 0, null);
         player.Setting();
 
-        Console.WriteLine("\n\nYour opponent will be: ");
+        Console.Write("\n\nYour opponent will be: ");
 
         int opponent = Globals.random.Next(1, 4);
 
@@ -211,13 +217,14 @@ class Program
                 throw new ArgumentException("Error: Random function didn't work");
         }
 
-        Console.WriteLine("\nYou're fighting!\n");
+        Console.WriteLine(enemy.Name);
+        Console.WriteLine("\nYou're fighting!");
         
         int beginner = Globals.random.Next(1,3);
         switch(beginner)
         {
             case 1:
-                Console.WriteLine("You begin!\n");
+                Console.WriteLine("You begin!");
                 while(player.HP > 0 && enemy.HP > 0)
                 {
                     enemy.Attacks(player);
@@ -226,7 +233,7 @@ class Program
                 break;
 
             case 2:
-                Console.WriteLine(enemy.Name + " begins!\n\n");
+                Console.WriteLine(enemy.Name + " begins!\n");
                 while(player.HP > 0 && enemy.HP > 0)
                 {
                     enemy.Attacks(player);
@@ -238,9 +245,9 @@ class Program
 
     public static void Display(Player player, Enemy enemy)
     {
-        Console.WriteLine("HP: " + player.HP + "\n");
-        Console.WriteLine("Attack: " + player.Attack + "\n");
-        Console.WriteLine("E. HP:" + enemy.HP + "\n");
-        Console.WriteLine("E. Attack: " + enemy.Attack + "\n\n");
+        Console.WriteLine("HP: " + player.HP);
+        Console.WriteLine("Attack: " + player.Attack);
+        Console.WriteLine("E. HP:" + enemy.HP);
+        Console.WriteLine("E. Attack: " + enemy.Attack + "\n");
     }        
 }

@@ -50,12 +50,12 @@ class Character
         int ca = Globals.random.Next(1, 11);
         if(ca < 4)
         {
-            Console.WriteLine("You counterattacked!");
+            Console.WriteLine("Counterattacked!");
             return Attack;
         }
         else
         {
-            Console.WriteLine("You failed counterattacking!");
+            Console.WriteLine("Counterattack failed!");
             HP -= attack1;
             return 0;
         }
@@ -110,15 +110,52 @@ class Player : Character
     public void RedSkeleton(Enemy enemy)
     {
         if(HP <= 20 && enemy.HP > Attack)
-            {
-                Console.WriteLine("If my counterattack succeeds, you die! MUAHAHAHA");
-                HP -= enemy.CounterAttack(Attack);
-            }
+        {
+            Console.WriteLine("Red Skeleton: If my counterattack succeeds, you die! MUAHAHAHA");
+            HP -= enemy.CounterAttack(Attack);
+
+            Console.WriteLine("Red Skeleton counterattacked!");
+        }
         else
+        {
+            Console.WriteLine("Red Skeleton: I better not risk this time...");
+            enemy.HP -= Attack;
+            Console.WriteLine("Red Skeleton received " + Attack + "damage");
+        }
+    }
+
+    public void FatZombie(Enemy enemy)
+    {
+        if(enemy.HP >= 15 && enemy.HP > Attack)
+        {
+            Console.WriteLine("Errr... You're cooked, and I want to eat...");
+            HP -= enemy.CounterAttack(Attack);
+        }
+        else if(enemy.HP < 15 && enemy.HP > 10 && HP <= 10)
+        {
+            Console.WriteLine("Fat Zombie: Gurrr... I want a McBrain...");
+            HP -= enemy.CounterAttack(Attack);
+        }
+        else if(enemy.HP < 15 && enemy.HP > 10 && (Attack * 1.5) < enemy.HP)
+        {
+            Console.WriteLine("Fat Zombie: Wharrr... Give me ozempic...");
+            if(Dodge())
             {
-                Console.WriteLine("I better not risk this time...")
-                enemy.HP -= Attack;
+                Console.WriteLine("Fat Zombie: Darrr... Fat people can also dodge...");
+                continue;
             }
+            else
+            {
+                enemy.HP -= (float)(Attack * 1.5);
+                ("Fat Zombie received" + Attack * 1.5 + "damage");
+            }
+        }
+        else if(enemy.HP < 10)
+        {
+            Console.WriteLine("Fat Zombie: Gerrr... Stop being fatfobic!");
+            enemy.HP -= (float)(Attack);
+            ("Fat Zombie received" + Attack + "damage");
+        }
     }
 }
 

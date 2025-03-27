@@ -157,6 +157,43 @@ class Player : Character
             ("Fat Zombie received" + Attack + "damage");
         }
     }
+
+    public void Corrupted Soldier(Enemy enemy)
+    {
+        if(enemy.HP>10 && Attack < (enemy.HP*(3/4)))
+        {
+            Console.WriteLine("Corrupted Soldier: Why are you doing this?");
+            HP -= enemy.CounterAttack(Attack);
+        }
+        else if(HP>5 && HP<10 && Attack < (enemy.HP*2))
+        {
+            Console.WriteLine("Corrupted Soldier: Please, don't do this. I have family. You don't even know me");
+            if(Dodge())
+            {
+                Console.WriteLine("Corrupted Soldier: I don't understand why you are doing this. Please, stop! I don't want to fight");
+                continue;
+            }
+            else
+            {
+                enemy.HP -= (float)(Attack * 1.5);
+                ("Corrupted Soldier received" + Attack * 1.5 + "damage");
+            }
+        }
+        else if(HP<5)
+        {
+            Console.WriteLine("Little Daughter: Dad? Dad! Why are you so injured? Why are they doing this to you!?");
+            if(Dodge())
+            {
+                Console.WriteLine("Corrupted Soldier: I don't know! But don't worry! I'll beat them and we'll go to that waterfall you always wanted to see!");
+                continue;
+            }
+            else
+            {
+                enemy.HP -= (float)(Attack * 1.5);
+                ("Corrupted Soldier received" + Attack * 1.5 + "damage");
+            }
+        }
+    }
 }
 
 class Enemy : Character
